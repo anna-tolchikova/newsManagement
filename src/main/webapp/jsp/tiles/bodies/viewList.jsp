@@ -6,12 +6,12 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<script type="text/javascript" src="../../js/custom.js"></script>
 
 <c:set var="isFromViewNews" value="false" scope="session" />
 
 <logic:notEmpty name="newsForm" property="newsList">
-	<c:set var="confirmationMessage"><bean:message key="errors.news.confirm.listdelete" /></c:set>
-	<html:form action="/deleteList" onsubmit="return confirmDeleteNewsList('${confirmationMessage}');">
+	<html:form action="/deleteList" onsubmit="return confirmDeleteNewsList();">
 		<c:forEach items="${newsForm.newsList}" var="news">
 			<div class="newsMessage">
 				<div>

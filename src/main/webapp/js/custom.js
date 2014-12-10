@@ -1,15 +1,16 @@
 
-function confirmDeleteNews(confirmationMessage){
-	return confirm(confirmationMessage);
+function confirmDeleteNews(){
+	return confirm(msgRemoveConfirmMessage);
 }
 
-function confirmDeleteNewsList(confirmationMessage){
+function confirmDeleteNewsList(){
 	var selectedCount = checkedCheckboxesCount('listNewsId');
 	if ( selectedCount != 0)
 	{
-		return confirm(confirmationMessage + " (" + selectedCount + ")");
+		return confirm(msgRemoveListConfirmMessage + " (" + selectedCount + ")");
 	}
 	else {
+		alert(msgNothingNewsForDelete);
 		return false;
 	}
 }

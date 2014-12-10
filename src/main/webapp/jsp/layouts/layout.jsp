@@ -10,9 +10,12 @@
 <!DOCTYPE HTML>
 <html:html>
 <head>
-<script type="text/javascript" src="js/custom.js"></script>
-<link rel="stylesheet" type="text/css" href="css/style.css">
-<meta charset="utf-8">
+<html:base/>
+<meta charset="utf-8"/>
+<link rel="stylesheet" type="text/css" href="../../css/style.css"/>
+<script type="text/javascript" src="../messages.jsp"></script>
+
+
 <c:set var="pageTitle"><tiles:getAsString name="title"/></c:set>
 <title><bean:message key="${pageTitle}"/></title>
 

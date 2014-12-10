@@ -6,7 +6,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<html:javascript formName="testNewsForm" />
+<script type="text/javascript" src="../../js/validator-js.js"></script>
 <html:errors/>
 <html:form action="/saveNews" styleClass="message"
 	onsubmit="return validateTestNewsForm(this); ">

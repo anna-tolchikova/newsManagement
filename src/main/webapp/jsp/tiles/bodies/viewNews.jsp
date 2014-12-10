@@ -6,7 +6,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-
+<script type="text/javascript" src="../../js/custom.js"></script>
 <c:set var="isFromViewNews" value="true" scope="session" />
 
 	<table class="viewnewstable">
@@ -40,9 +40,8 @@
 				<bean:message key="layout.button.edit" />
 			</html:button>
 		</html:link>
-		<c:set var="confirmationMessage"><bean:message key="errors.news.confirm.delete" /></c:set>
 		<html:link action="/deleteNews" paramId="id" paramName="testNewsForm"
-			paramProperty="id" onclick="return confirmDeleteNews('${confirmationMessage}');">
+			paramProperty="id" onclick="return confirmDeleteNews();">
 			<html:button property="button">
 				<bean:message key="layout.button.delete" />
 			</html:button>
