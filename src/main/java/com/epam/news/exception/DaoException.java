@@ -1,0 +1,24 @@
+package com.epam.news.exception;
+
+public class DaoException extends TechnicalException  {
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4243086099075456992L;
+
+	public DaoException() {
+    }
+
+    public DaoException(String message) {
+        super(message);
+    }
+
+    public DaoException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public DaoException(Throwable cause) {
+        super(cause);
+    }
+}

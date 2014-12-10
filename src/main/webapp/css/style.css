@@ -1,0 +1,178 @@
+html,body {
+	margin: 0;
+	padding: 0;
+	width: 99%;
+	min-width: 1260px;
+	max-width: 1260px;
+	background-color: #ffffff;
+	color: #666;
+	font-family: sans-serif;
+}
+
+.layout {
+	width: inherit;
+}
+
+.wrapper {
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.content {
+	border: 2px solid #7366BD;
+	border-bottom: 0px;
+	border-top: 0px;
+	padding: 5px 5px 50px 5px;
+	float:right;
+	width:calc(100% - 272px);
+	
+	
+}
+
+.menu {
+	float: left;
+	width: 250px;
+	background-color: #a4a4a4;
+	min-height: 150px;
+	float: left;
+	padding: 2px;
+	border: 2px solid #7366BD;
+}
+
+#menuInner {
+	margin-left: 20px;
+	background-color: white;
+	text-align: center;
+	min-height: 40px;
+}
+
+#menuInner li {
+	color: #3A75C4;
+	list-style-type: square;
+	font-weight: bold;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.menuTitle {
+	margin-left: 10px;
+	color: white;
+	text-align: center;
+	background-color: gray;
+	min-height: 30px;
+	padding-top: 5px;
+}
+
+.header h1 {
+	color: #5C5B93;
+	margin-left: 20px;
+	text-align: left;
+	margin-left: 20px;
+}
+
+.header {
+	
+	height: 100px;
+	border-top: 0;
+	margin: 0;
+	font-family: sans-serif;
+	height: 100px;
+}
+
+.header a {
+	
+	float: right;
+	margin: 0px 5px 5px 5px;
+}
+
+.header a:HOVER,.menu a:HOVER {
+	color: orange;
+}
+
+.header a:ACTIVE,.menu a:ACTIVE {
+	color: gray;
+}
+
+.footer {
+	height: 20px;
+	text-align: center;
+	border-bottom: 0;
+	bottom: 0;
+}
+
+.header,.footer {
+	border: 2px solid #7366BD;
+}
+
+.titlelist {
+	padding: 5px;
+}
+
+.newsdate {
+	float: right;
+	text-decoration: underline;
+}
+
+.newstitle {
+	font-weight: bolder;
+}
+
+.innertext {
+	color: black;
+}
+
+.innertitle {
+	vertical-align: top;
+}
+
+.newsMessage {
+	margin: 10px;
+	border-top: 1px solid #7366BD;
+}
+
+.controlbar {
+	float: right;
+	margin: 5px;
+}
+
+#deletebutton {
+	padding-top: 5px;
+	border-top: 1px solid #7366BD;
+	margin: 10px;
+	text-align: right;
+	border-top: 1px solid #7366BD;
+}
+
+.createbutton {
+	width: 100%;
+	text-align: center;
+}
+
+.error {
+	font-size: large;
+}
+
+.viewbtn {
+	padding: 5px;
+	float: right;
+	display: block;
+	float: right;
+}
+
+.viewnewstable {
+	width: 90%;
+	padding-bottom: 15px;
+}
+
+.viewnewstable tbody tr td:nth-child(1)  {
+	font-weight: bolder;
+}
+
+.viewnewstable textarea,.viewnewstable input {
+	width:100%;
+}
+
+.clear {
+	clear: both;
+}

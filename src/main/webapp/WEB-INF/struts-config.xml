@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC 
+"-//Apache Software Foundation//DTD Struts Configuration 1.3//EN" 
+"http://jakarta.apache.org/struts/dtds/struts-config_1_3.dtd">
+
+<struts-config>
+
+	<form-beans>
+		<form-bean name="newsForm" type="com.epam.news.presentation.form.NewsForm" />
+		<form-bean name="testNewsForm"
+			type="com.epam.news.presentation.form.TestNewsForm" />
+		<form-bean name="localeForm" type="com.epam.news.presentation.form.LocaleForm" />
+	</form-beans>
+
+
+	<global-forwards>
+		<forward name="error" path="news.errors" />
+	</global-forwards>
+
+
+	<action-mappings>
+		<action path="/viewList"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="newsForm"
+			parameter="viewList" validate="false">
+			<forward name="success" path="news.list" />
+		</action>
+
+		<action path="/addNews"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="testNewsForm"
+			parameter="addNews" validate="false">
+			<forward name="success" path="news.add" />
+
+		</action>
+
+		<action path="/editNews"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="testNewsForm"
+			parameter="editNews" validate="false">
+			<forward name="success" path="news.add" />
+		</action>
+
+		<action path="/saveNews"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="testNewsForm"
+			parameter="saveNews" validate="true" input="news.add" cancellable="true">
+			<forward name="viewlist" path="/viewList.do" redirect="true" />
+			<forward name="viewnews" path="/viewNews.do" redirect="true" />
+		</action>
+
+		<action path="/deleteNews"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="testNewsForm"
+			parameter="deleteNews" validate="false">
+			<forward name="success" path="/viewList.do" redirect="true"/>
+		</action>
+
+		<action path="/deleteList"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="newsForm"
+			parameter="deleteList" validate="false">
+			<forward name="success" path="/viewList.do" redirect="true" />
+		</action>
+
+		<action path="/viewNews"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="testNewsForm"
+			parameter="viewNews" validate="false">
+			<forward name="success" path="news.view" />
+		</action>
+
+		<action path="/editCancel"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="testNewsForm"
+			parameter="editCancel" validate="false">
+			
+		</action>
+
+		<action path="/changeLanguage"
+			type="org.springframework.web.struts.DelegatingActionProxy" name="localeForm"
+			parameter="changeLanguage">
+			<forward name="viewlist" path="/viewList.do" redirect="true" />
+		</action>
+
+
+	</action-mappings>
+
+	<controller processorClass="org.apache.struts.tiles.TilesRequestProcessor" />
+
+
+	<!-- Resources -->
+	<message-resources parameter="ApplicationResource"
+		null="false" />
+
+
+	<!-- Struts plugins -->
+	<plug-in className="org.springframework.web.struts.ContextLoaderPlugIn">
+		<set-property property="contextConfigLocation" value="/WEB-INF/spring-beans.xml" />
+	</plug-in>
+
+	<plug-in className="org.apache.struts.tiles.TilesPlugin">
+		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
+		<set-property property="moduleAware" value="true" />
+	</plug-in>
+
+	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property property="pathnames"
+			value="/WEB-INF/validator/validator-rules.xml, /WEB-INF/validator/validator-user.xml" />
+		<set-property property="stopOnFirstError" value="false" />
+	</plug-in>
+
+
+</struts-config>
