@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  * corrects request and response encoding
  */
 
-public class EncodingFilter implements Filter {
+public final class EncodingFilter implements Filter {
 
     private static Logger log = Logger.getLogger(EncodingFilter.class);
     private static int reqCount;

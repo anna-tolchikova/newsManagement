@@ -19,7 +19,7 @@ import com.epam.news.presentation.form.TestNewsForm;
 import com.epam.news.dao.INewsDao;
 import com.epam.news.entity.News;
 
-public class NewsAction extends MappingDispatchAction {
+public final class NewsAction extends MappingDispatchAction {
 
 	private static final Logger LOG = Logger.getLogger(NewsAction.class);
 

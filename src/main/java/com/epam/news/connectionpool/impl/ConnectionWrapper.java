@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class ConnectionWrapper {
+public final class ConnectionWrapper {
 
 
     private static Logger log = Logger.getLogger(ConnectionWrapper.class);

@@ -11,7 +11,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class HibernateNewsDao implements INewsDao{
+public final class HibernateNewsDao implements INewsDao{
 
 	private SessionFactory sessionFactory;
 

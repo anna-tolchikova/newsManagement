@@ -8,7 +8,7 @@ import org.apache.struts.action.ActionForm;
 import com.epam.news.entity.News;
 
 
-public class NewsForm extends ActionForm{
+public final class NewsForm extends ActionForm{
 
 	private static final long serialVersionUID = 1L;
 

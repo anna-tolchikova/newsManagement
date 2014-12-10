@@ -16,7 +16,7 @@ import com.epam.news.dao.abstractdao.AbstractDao;
 import com.epam.news.entity.News;
 import com.epam.news.exception.DaoException;
 
-public class NewsDao extends AbstractDao implements INewsDao {
+public final class NewsDao extends AbstractDao implements INewsDao {
 
 	// private static final Logger LOG = Logger.getLogger(NewsDao.class);
 

@@ -15,7 +15,7 @@ import org.apache.struts.validator.ValidatorForm;
 import com.epam.news.helperbean.DateConverterBean;
 import com.epam.news.presentation.action.NewsAction;
 
-public class TestNewsForm extends ValidatorForm {
+public final class TestNewsForm extends ValidatorForm {
 
 	private static final Logger LOG = Logger.getLogger(TestNewsForm.class);
 	private static final long serialVersionUID = -3823581748283691103L;

@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
-public class LocaleForm extends ActionForm{
+public final class LocaleForm extends ActionForm{
 
 
 	private static final long serialVersionUID = -1344578723070771964L;

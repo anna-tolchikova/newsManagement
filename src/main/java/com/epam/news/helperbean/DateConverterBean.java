@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 
-public class DateConverterBean {
+public final class DateConverterBean {
 
 	private static Logger LOG = Logger.getLogger(DateConverterBean.class);
 	
