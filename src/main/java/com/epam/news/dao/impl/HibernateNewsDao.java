@@ -10,14 +10,14 @@ import com.epam.news.exception.DaoException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public final class HibernateNewsDao implements INewsDao{
 
-	private SessionFactory sessionFactory;
-
-//	public HibernateNewsDAO() {
-//	}
-
+	private SessionFactory sessionFactory;  
+	
+	
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
@@ -25,11 +25,14 @@ public final class HibernateNewsDao implements INewsDao{
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	
+
 	@Override
-	public ArrayList<News> getList() throws DaoException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<News> getList() throws DaoException {
+		Session session = this.sessionFactory.getCurrentSession();
+        List<News> personsList = 	session.
+        							createQuery("from News").
+        							list();
+        return personsList;
 	}
 
 	@Override

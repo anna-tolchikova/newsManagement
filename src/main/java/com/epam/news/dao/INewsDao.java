@@ -8,7 +8,7 @@ import com.epam.news.exception.DaoException;
 
 public interface INewsDao{
 
-	ArrayList<News> getList() throws DaoException;
+	List<News> getList() throws DaoException;
 	
 	News save(News news) throws DaoException;
 	

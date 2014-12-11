@@ -44,7 +44,7 @@ public final class NewsAction extends MappingDispatchAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		LOG.info("VIEW LIST ACTION");
-		ArrayList<News> newsList = null;
+		List<News> newsList = null;
 		newsList = newsDao.getList();
 		NewsForm newsForm = (NewsForm) form;
 		newsForm.setNewsList(newsList);

@@ -9,7 +9,7 @@
 	<bean
 		name="/viewList, /addNews, /editNews, /saveNews, /deleteNews , /deleteList, /viewNews, /editCancel"
 		class="com.epam.news.presentation.action.NewsAction">
-		<property name="newsDao" ref="newsDao" />
+		<property name="newsDao" ref="hibernateNewsDao" />
 	</bean>
 
 </beans>

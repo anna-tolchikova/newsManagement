@@ -35,9 +35,9 @@ public final class NewsDao extends AbstractDao implements INewsDao {
 	private static final String DELETE_NEWS = "DELETE FROM NEWS WHERE ID=";
 	private static final String DELETE_NEWS_LIST = "DELETE FROM NEWS WHERE ID IN (?)";
 
-	public ArrayList<News> getList() throws DaoException {
+	public List<News> getList() throws DaoException {
 		ConnectionWrapper connector = getConnection();
-		ArrayList<News> listNews = new ArrayList<News>();
+		List<News> listNews = new ArrayList<News>();
 		News news = null;
 		Statement statement = null;
 		ResultSet resultSet = null;
