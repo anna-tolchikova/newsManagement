@@ -2,13 +2,18 @@ package com.epam.news.dao.impl;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 //import org.apache.log4j.Logger;
 
+
+
+
+
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import com.epam.news.connectionpool.impl.ConnectionWrapper;
 import com.epam.news.dao.INewsDao;
@@ -30,10 +35,10 @@ public final class NewsDao extends AbstractDao implements INewsDao {
 	private static final String SELECT_NEWS_BY_ID = "SELECT * FROM NEWS WHERE ID =";
 	private static final String UPDATE_NEWS = "UPDATE NEWS SET TITLE=?, BRIEF=?, POST_DATE=?, CONTENT=? where ID=?";
 	private static final String CREATE_NEWS = "INSERT INTO NEWS "
-			+ "(TITLE, BRIEF, POST_DATE, CONTENT ) VALUES ( ?, ?, ?, ?)";
-	private static final String SELECT_CURRENT_NEWS_ID = "SELECT NEWS_SEQ.CURRVAL FROM dual";
-	private static final String DELETE_NEWS = "DELETE FROM NEWS WHERE ID=";
-	private static final String DELETE_NEWS_LIST = "DELETE FROM NEWS WHERE ID IN (?)";
+			+ "(TITLE, BRIEF, POST_DATE, CONTENT, ID ) VALUES ( ?, ?, ?, ?, ?)";
+	private static final String SELECT_NEXT_NEWS_ID = "SELECT NEWS_SEQ.NEXTVAL FROM dual";
+	private static final String DELETE_NEWS = "DELETE FROM NEWS WHERE ID=?";
+//	private static final String DELETE_NEWS_LIST = "DELETE FROM NEWS WHERE ID IN (?)";
 
 	public List<News> getList() throws DaoException {
 		ConnectionWrapper connector = getConnection();
@@ -53,7 +58,7 @@ public final class NewsDao extends AbstractDao implements INewsDao {
 				news.setBrief(resultSet.getString(PROPERTY_BRIEF));
 				listNews.add(news);
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error during getting list of news:", e);
 		} finally {
 			closeTransaction(connector, statement);
@@ -64,33 +69,34 @@ public final class NewsDao extends AbstractDao implements INewsDao {
 	public News save(News news) throws DaoException {
 		ConnectionWrapper connector = getConnection();
 		PreparedStatement preparedStatement = null;
-		Statement currvalStatement = null;
-		ResultSet currvalResultSet = null;
+		Statement nextvalStatement = null;
+		ResultSet nextvalResultSet = null;
 		try {
 
 			connector.setAutoCommit(false);
+			nextvalStatement = connector.createStatement();
+			nextvalResultSet = nextvalStatement.executeQuery(SELECT_NEXT_NEWS_ID);
+			int id = 0;
+			if (nextvalResultSet.next()) {
+				id = nextvalResultSet.getInt(1);
+			}
 			preparedStatement = connector.prepareStatement(CREATE_NEWS);
 			preparedStatement.setString(1, news.getTitle());
 			preparedStatement.setString(2, news.getBrief());
 			preparedStatement.setDate(3, news.getPostDate());
 			preparedStatement.setString(4, news.getContent());
+			preparedStatement.setInt(5, id);
 			preparedStatement.executeUpdate();
-			currvalStatement = connector.createStatement();
-			currvalResultSet = currvalStatement.executeQuery(SELECT_CURRENT_NEWS_ID);
-			int id = 0;
-			if (currvalResultSet.next()) {
-				id = currvalResultSet.getInt(1);
-			}
 			connector.commit();
 			connector.setAutoCommit(true);
 			news.setId(id);
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error during saving new news:", e);
 		} finally {
 			try {
-				currvalStatement.close();
-			} catch (SQLException e) {
+				nextvalStatement.close();
+			} catch (Exception e) {
 				throw new DaoException("Error during saving new news:", e);
 			}
 			closeTransaction(connector, preparedStatement);
@@ -98,23 +104,24 @@ public final class NewsDao extends AbstractDao implements INewsDao {
 		return news;
 	}
 
-	public boolean remove(Integer id) throws DaoException {
+	public int remove(Integer id) throws DaoException {
 		ConnectionWrapper connector = getConnection();
-		Statement statement = null;
-		boolean isDeleted = false;
+		PreparedStatement preparedStatement = null;
+		int affectedRowsCount = 0;
 		try {
-			statement = connector.createStatement();
-			String sql = DELETE_NEWS + id;
-			if (statement.executeUpdate(sql) != 0) {
-				isDeleted = true;
+			preparedStatement = connector.prepareStatement(DELETE_NEWS);
+			preparedStatement.setInt(1, id);
+			affectedRowsCount = preparedStatement.executeUpdate();
+			if (affectedRowsCount > 1) {
+				throw new Exception ("Error. More than 1 news was deleted. Check your SQL statement.");
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error during removing news:", e);
 		} finally {
-			closeTransaction(connector, statement);
+			closeTransaction(connector, preparedStatement);
 		}
 
-		return isDeleted;
+		return affectedRowsCount;
 	}
 
 	public News fetchById(Integer id) throws DaoException {
@@ -134,7 +141,7 @@ public final class NewsDao extends AbstractDao implements INewsDao {
 				news.setPostDate(resultSet.getDate(PROPERTY_DATE));
 				news.setBrief(resultSet.getString(PROPERTY_BRIEF));
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error during fetching news by id:", e);
 		} finally {
 			closeTransaction(connector, statement);
@@ -153,43 +160,30 @@ public final class NewsDao extends AbstractDao implements INewsDao {
 			preparedStatement.setString(4, news.getContent());
 			preparedStatement.setInt(5, news.getId());
 			preparedStatement.executeUpdate();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new DaoException("Error during updating news:", e);
 		} finally {
 			closeTransaction(connector, preparedStatement);
 		}
 	}
 
-	public boolean deleteList(List<Integer> idList) throws DaoException {
+	public int deleteList(List<Integer> idList) throws DaoException {
 		ConnectionWrapper connector = getConnection();
 		PreparedStatement preparedStatement = null;
-		boolean isListDeleted = false;
-		int listSize;
-		listSize = idList.size();
+		int affectedRowsCount = 0;
 		try {
-			preparedStatement = connector.prepareStatement(prepareSql(listSize));
-			int pos = 0;
+			preparedStatement = connector.prepareStatement(DELETE_NEWS);
 			for (int id : idList) {
-				preparedStatement.setInt(++pos, id);
+				preparedStatement.setInt(1, id);
+				affectedRowsCount += preparedStatement.executeUpdate();
 			}
-			if (preparedStatement.executeUpdate() == listSize) {
-				isListDeleted = true;
-			}
-		} catch (SQLException e) {
+			
+		} catch (Exception e) {
 			throw new DaoException("Error during removing news list:", e);
 		} finally {
 			closeTransaction(connector, preparedStatement);
 		}
-		return isListDeleted;
-	}
-
-	private String prepareSql(int batchSize) {
-		StringBuilder sql = new StringBuilder();
-		for (int i = 0; i < batchSize - 1 ; i++) {
-			sql.append("?,");
-		}
-		sql.append('?');
-		return DELETE_NEWS_LIST.replace("?", sql);
+		return affectedRowsCount;
 	}
 
 }

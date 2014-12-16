@@ -1,7 +1,6 @@
 package com.epam.news.presentation.action;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
@@ -13,27 +12,31 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.MappingDispatchAction;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.epam.news.presentation.form.NewsForm;
 import com.epam.news.presentation.form.TestNewsForm;
-import com.epam.news.dao.INewsDao;
+import com.epam.news.service.INewsService;
+import com.epam.news.aspects.Monitor;
 import com.epam.news.entity.News;
+import com.epam.news.exception.ServiceException;
 
-public final class NewsAction extends MappingDispatchAction {
+@Monitor
+public class NewsAction extends MappingDispatchAction {
 
 	private static final Logger LOG = Logger.getLogger(NewsAction.class);
 
 	private final static String SUCCESS_PATH = "success";
-	private final static String ERROR_PATH = "error";
+	private final static String ERROR404_PATH = "error404";
 
-	private INewsDao newsDao;
+	private INewsService newsService;
 
-	public INewsDao getNewsDao() {
-		return newsDao;
+	public INewsService getNewsService() {
+		return newsService;
 	}
 
-	public void setNewsDao(INewsDao newsDao) {
-		this.newsDao = newsDao;
+	public void setNewsService(INewsService newsService) {
+		this.newsService = newsService;
 	}
 
 	public NewsAction() {
@@ -44,18 +47,23 @@ public final class NewsAction extends MappingDispatchAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		LOG.info("VIEW LIST ACTION");
-		List<News> newsList = null;
-		newsList = newsDao.getList();
-		NewsForm newsForm = (NewsForm) form;
-		newsForm.setNewsList(newsList);
-		newsForm.setListNewsId(null);
+		try {
+			List<News> newsList = null;
+			newsList = newsService.getAllNews();
+			NewsForm newsForm = (NewsForm) form;
+			newsForm.setNewsList(newsList);
+			newsForm.setListNewsId(null);
+		} catch (ServiceException e) {
+			LOG.error(e);
+			return mapping.findForward(ERROR404_PATH);
+		}
 		return mapping.findForward(SUCCESS_PATH);
-
 	}
 
 	public ActionForward addNews(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+
 		LOG.info("ADD ACTION");
 		TestNewsForm newsForm = (TestNewsForm) form;
 		News news = new News();
@@ -63,83 +71,81 @@ public final class NewsAction extends MappingDispatchAction {
 		Date curDate = new Date(System.currentTimeMillis());
 		newsForm.setPostDate(curDate);
 		return mapping.findForward(SUCCESS_PATH);
+
 	}
 
 	public ActionForward editNews(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-
-		TestNewsForm newsForm = (TestNewsForm) form;
-		int id = newsForm.getId();
-		if (id != 0) {
-			LOG.info("EDIT ACTION");
+		LOG.info("EDIT ACTION");
+		try {
+			TestNewsForm newsForm = (TestNewsForm) form;
+			int id = newsForm.getId();
 			News news = new News();
-			news = newsDao.fetchById(id);
-			System.out.println(news);
+			news = newsService.findNewsByIdForGetAction(id);
 			fillTestNewsForm(newsForm, news);
-		} else {
-			LOG.error("EDIT ACTION NO ID");
-			return mapping.findForward(ERROR_PATH);
+		} catch (ServiceException e) {
+			LOG.error(e);
+			return mapping.findForward(ERROR404_PATH);
 		}
-
 		return mapping.findForward(SUCCESS_PATH);
 	}
 
 	public ActionForward saveNews(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-
-		if (isCancelled(request)) {
-			LOG.info("EDIT CANCEL ACTION");
-			TestNewsForm newsForm = (TestNewsForm) form;
-			int idViewedNews = newsForm.getIdViewedNews();
-			if (idViewedNews != 0) {
-				News news = null;
-				news = newsDao.fetchById(idViewedNews);
-				if (news != null) {
-					fillTestNewsForm(newsForm, news);
-					return mapping.findForward("viewnews");
+		try {
+			if (isCancelled(request)) {
+				LOG.info("EDIT CANCEL ACTION");
+				TestNewsForm newsForm = (TestNewsForm) form;
+				int idViewedNews = newsForm.getIdViewedNews();
+				if (idViewedNews != 0) {
+					News news = null;
+					news = newsService.findNewsById(idViewedNews);
+					if (news != null) {
+						fillTestNewsForm(newsForm, news);
+						return mapping.findForward("viewnews");
+					} else {
+						return mapping.findForward("viewlist");
+					}
 				} else {
 					return mapping.findForward("viewlist");
 				}
 			} else {
-				return mapping.findForward("viewlist");
+				TestNewsForm testNewsForm = (TestNewsForm) form;
+				int id = testNewsForm.getId();
+				News news = new News();
+				if (id == 0) {
+					LOG.info("SAVE (ADD NEW) ACTION");
+					fillNews(news, testNewsForm);
+					newsService.saveNews(news);
+					fillTestNewsForm(testNewsForm, news);
+				} else {
+					LOG.info("SAVE (EDIT) ACTION");
+					fillNews(news, testNewsForm);
+					newsService.updateNews(news);
+					fillTestNewsForm(testNewsForm, news);
+				}
+				return mapping.findForward("viewnews");
 			}
-		} else {
-			TestNewsForm testNewsForm = (TestNewsForm) form;
-			int id = testNewsForm.getId();
-			News news = new News();
-			if (id == 0) {
-				LOG.info("SAVE (ADD NEW) ACTION");
-				fillNews(news, testNewsForm);
-				newsDao.save(news);
-				fillTestNewsForm(testNewsForm, news);
-			} else {
-				LOG.info("SAVE (EDIT) ACTION");
-				fillNews(news, testNewsForm);
-				newsDao.update(news);
-				fillTestNewsForm(testNewsForm, news);
-			}
-			return mapping.findForward("viewnews");
+		} catch (ServiceException e) {
+			LOG.error(e);
+			return mapping.findForward(ERROR404_PATH);
 		}
 	}
 
 	public ActionForward deleteNews(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-
-		TestNewsForm newsForm = (TestNewsForm) form;
-		int id = newsForm.getId();
-		if (id != 0) {
-			LOG.info("DELETE NEWS ACTION");
-			if (!newsDao.remove(id)) {
-				return mapping.findForward(ERROR_PATH);
-			}
-		} else {
-			LOG.error("DELETE ACTION: NO ID");
-			return mapping.findForward(ERROR_PATH);
+		LOG.info("DELETE NEWS ACTION");
+		try {
+			TestNewsForm newsForm = (TestNewsForm) form;
+			int id = newsForm.getId();
+			newsService.deleteNewsById(id);
+		} catch (ServiceException e) {
+			LOG.error(e);
+			return mapping.findForward(ERROR404_PATH);
 		}
-
 		return mapping.findForward(SUCCESS_PATH);
 	}
 
@@ -147,12 +153,15 @@ public final class NewsAction extends MappingDispatchAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		LOG.info("DELETE NEWS LIST ACTION");
-		NewsForm newsForm = (NewsForm) form;
-		if (newsForm.getListNewsId() != null) {
-			List<Integer> idList = Arrays.asList(newsForm.getListNewsId());
-			if (idList.size() != 0) {
-				newsDao.deleteList(idList);
+		try {
+			NewsForm newsForm = (NewsForm) form;
+			if (newsForm.getListNewsId() != null) {
+				List<Integer> idList = Arrays.asList(newsForm.getListNewsId());
+				newsService.deleteNewsList(idList);
 			}
+		} catch (ServiceException e) {
+			LOG.error(e);
+			return mapping.findForward(ERROR404_PATH);
 		}
 		return mapping.findForward(SUCCESS_PATH);
 	}
@@ -160,31 +169,17 @@ public final class NewsAction extends MappingDispatchAction {
 	public ActionForward viewNews(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		TestNewsForm newsForm = (TestNewsForm) form;
-		int id = newsForm.getId();
-		News news = null;
-
-		if (id == 0) {
-
-			// int idViewedNews = newsForm.getIdViewedNews();
-			// if (idViewedNews != 0) {
-			// news = newsDao.fetchById(idViewedNews);
-			// if (news != null) {
-			// fillTestNewsForm(newsForm, news);
-			// newsForm.setIdViewedNews(idViewedNews);
-			// }
-			// }
-			LOG.error("VIEW ACTION: NO ID IN FORM!!!");
-			return mapping.findForward(ERROR_PATH);
-		} else {
-			LOG.info("VIEW ACTION: VIEW ACTION NEWS ID = " + id);
-			news = newsDao.fetchById(id);
-			if (news != null) {
-				fillTestNewsForm(newsForm, news);
-				newsForm.setIdViewedNews(id);
-			}
+		LOG.info("VIEW ACTION");
+		try {
+			TestNewsForm newsForm = (TestNewsForm) form;
+			int id = newsForm.getId();
+			News news = newsService.findNewsByIdForGetAction(id);
+			fillTestNewsForm(newsForm, news);
+			newsForm.setIdViewedNews(id);
+		} catch (ServiceException e) {
+			LOG.error(e);
+			return mapping.findForward(ERROR404_PATH);
 		}
-
 		return mapping.findForward(SUCCESS_PATH);
 	}
 
@@ -196,7 +191,7 @@ public final class NewsAction extends MappingDispatchAction {
 		int idViewedNews = newsForm.getIdViewedNews();
 		if (idViewedNews != 0) {
 			News news = null;
-			news = newsDao.fetchById(idViewedNews);
+			news = newsService.findNewsById(idViewedNews);
 			if (news != null) {
 				fillTestNewsForm(newsForm, news);
 				return mapping.findForward("viewnews");
@@ -223,4 +218,5 @@ public final class NewsAction extends MappingDispatchAction {
 		newsForm.setBrief(news.getBrief());
 		newsForm.setContent(news.getContent());
 	}
+
 }

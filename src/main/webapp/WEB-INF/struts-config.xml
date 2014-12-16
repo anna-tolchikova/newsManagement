@@ -14,7 +14,7 @@
 
 
 	<global-forwards>
-		<forward name="error" path="news.errors" />
+		<forward name="error404" path="news.error404" />
 	</global-forwards>
 
 

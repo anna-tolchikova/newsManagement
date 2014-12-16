@@ -12,12 +12,12 @@ public interface INewsDao{
 	
 	News save(News news) throws DaoException;
 	
-	boolean remove(Integer id) throws DaoException;
+	int remove(Integer id) throws DaoException;
 	
 	News fetchById(Integer id) throws DaoException;
 	
 	void update(News news) throws DaoException;
 	
-	boolean deleteList(List<Integer> idList) throws DaoException;
+	int deleteList(List<Integer> idList) throws DaoException;
 	
 }

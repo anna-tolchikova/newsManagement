@@ -5,11 +5,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<!-- Definition for newsAction bean -->
-	<bean
-		name="/viewList, /addNews, /editNews, /saveNews, /deleteNews , /deleteList, /viewNews, /editCancel"
-		class="com.epam.news.presentation.action.NewsAction">
-		<property name="newsService" ref="newsService" />
+	<bean id="newsService" class="com.epam.news.service.impl.NewsServiceImpl">
+		<property name="newsDao" ref="hibernateNewsDao" />
 	</bean>
 
 </beans>

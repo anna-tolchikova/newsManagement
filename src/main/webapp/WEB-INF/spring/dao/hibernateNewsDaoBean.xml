@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
        http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 	   http://www.springframework.org/schema/context
@@ -45,17 +43,28 @@
 		</property>
 	</bean>
 
-	<tx:annotation-driven transaction-manager="hibernateTransactionManager" /> 
-	<!-- Transaction Manager -->
-	<bean id="hibernateTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"> 
-		<property name="sessionFactory" ref="hibernateSessionFactory" /> </bean> 
-		
 
-	
+	<!-- Transaction Manager -->
+	<bean id="hibernateTransactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="hibernateSessionFactory" />
+	</bean>
+
+	<!-- enable the configuration of transactional behavior based on annotations -->
+	<tx:annotation-driven transaction-manager="hibernateTransactionManager" />
+
+
 	<!-- HibernateNewsDao -->
 	<bean id="hibernateNewsDao" class="com.epam.news.dao.impl.HibernateNewsDao">
 		<property name="sessionFactory" ref="hibernateSessionFactory" />
 	</bean>
+
+	<!-- Enable annotation based AOP definitions -->
+	<aop:aspectj-autoproxy/>
+	
+	<bean id="myActionInterceptor" class="com.epam.news.aspects.ActionAspectHandler">
+	</bean>
+
 
 </beans>
 

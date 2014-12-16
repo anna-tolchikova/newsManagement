@@ -26,9 +26,9 @@
 		<put name="body" value="/jsp/tiles/bodies/viewNews.jsp" />
 	</definition>
 
-	<definition name="news.errors" extends="layout">
-		<put name="title" value="layout.title.error" />
-		<put name="body" value="/jsp/tiles/bodies/errors.jsp" />
+	<definition name="news.error404" extends="layout">
+		<put name="title" value="layout.title.404" />
+		<put name="body" value="/jsp/tiles/bodies/error404.jsp" />
 	</definition>
 
 

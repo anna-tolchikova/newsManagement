@@ -13,7 +13,7 @@ import org.apache.struts.actions.MappingDispatchAction;
 
 import com.epam.news.presentation.form.LocaleForm;
 
-public final class LocaleAction extends MappingDispatchAction {
+public class LocaleAction extends MappingDispatchAction {
 
 	public ActionForward changeLanguage(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
