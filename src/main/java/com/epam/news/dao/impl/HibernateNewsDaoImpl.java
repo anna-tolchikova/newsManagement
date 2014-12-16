@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class HibernateNewsDao implements INewsDao {
+public class HibernateNewsDaoImpl implements INewsDao {
 
-	private final static Logger LOG = Logger.getLogger(HibernateNewsDao.class);
+	private final static Logger LOG = Logger.getLogger(HibernateNewsDaoImpl.class);
 
 	private static final String HQL_SELECT_ALL_NEWS = "FROM News ORDER BY postDate DESC, id DESC";
 	private static final String HQL_SELECT_NEWS_BY_ID = "FROM News WHERE id = :news_id";

@@ -6,7 +6,7 @@
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<!-- Definition for newsDao bean -->
-	<bean name="newsDao" class="com.epam.news.dao.impl.NewsDao">
+	<bean name="newsDao" class="com.epam.news.dao.impl.NewsDaoImpl">
 		<property name="connectionPool" ref="connectionPool"/>
 	</bean>
 

@@ -55,7 +55,7 @@
 
 
 	<!-- HibernateNewsDao -->
-	<bean id="hibernateNewsDao" class="com.epam.news.dao.impl.HibernateNewsDao">
+	<bean id="hibernateNewsDao" class="com.epam.news.dao.impl.HibernateNewsDaoImpl">
 		<property name="sessionFactory" ref="hibernateSessionFactory" />
 	</bean>
 
