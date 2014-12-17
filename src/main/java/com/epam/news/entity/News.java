@@ -3,29 +3,51 @@
  */
 package com.epam.news.entity;
 
+import java.io.Serializable;
 import java.sql.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
-/**
- * @author Hanna_Tolchykava
- *
- */
-public class News{
+
+@Entity
+@Table(name = "NEWS")
+public class News implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ")
+	@SequenceGenerator(name = "SEQ", sequenceName = "NEWS_SEQ")
+	@Column(name = "ID")
 	private int id;
+	
+	@Column(name = "TITLE", length = 100)
 	private String title;
+	
+	@Column(name = "POST_DATE")
 	private Date postDate;
+	
+	@Column(name = "BRIEF", length = 500)
 	private String brief;
+	
+	@Column(name = "CONTENT", length = 1000)
 	private String content;
 	
 	private String displayPostDate;
 	
-	public int getId() {
-		return id;
-	}
 	
 	public News() {
-		super();
+		
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public void setId(int id) {

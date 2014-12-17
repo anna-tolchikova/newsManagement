@@ -6,9 +6,13 @@ import java.util.List;
 
 
 
+
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +21,6 @@ import com.epam.news.entity.News;
 import com.epam.news.exception.DaoException;
 import com.epam.news.exception.ServiceException;
 import com.epam.news.service.INewsService;
-
 
 public class NewsServiceImpl implements INewsService {
 

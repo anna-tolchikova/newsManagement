@@ -7,7 +7,9 @@
 
 	<!-- Beans Declaration -->
 	 <!--<import resource="spring/pool/connectionPoolBean.xml" />
-	<import resource="spring/dao/newsDaoBean.xml" /> -->
+	<import resource="spring/dao/newsDaoBean.xml" /> 
+	<import resource="spring/dao/jpaNewsDaoBean.xml" />
+	-->
 	<import resource="spring/dao/hibernateNewsDaoBean.xml" />
 	<import resource="spring/service/newsService.xml" />
 	<import resource="spring/action/newsActionBean.xml" />

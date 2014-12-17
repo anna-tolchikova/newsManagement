@@ -17,11 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.epam.news.presentation.form.NewsForm;
 import com.epam.news.presentation.form.TestNewsForm;
 import com.epam.news.service.INewsService;
-import com.epam.news.aspects.Monitor;
 import com.epam.news.entity.News;
 import com.epam.news.exception.ServiceException;
 
-@Monitor
 public class NewsAction extends MappingDispatchAction {
 
 	private static final Logger LOG = Logger.getLogger(NewsAction.class);
