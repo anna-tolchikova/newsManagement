@@ -16,7 +16,7 @@ import com.epam.news.exception.DaoException;
 
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
-public class JpaNewsDaoImpl implements INewsDao {
+public final class JpaNewsDaoImpl implements INewsDao {
 
 	private static final String JPQL_SELECT_ALL_NEWS = "SELECT n FROM News n ORDER BY n.postDate DESC, n.id DESC";
 	private final static String JPQL_DELETE_BY_ID = "DELETE FROM News n "

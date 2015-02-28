@@ -29,7 +29,8 @@ html,body {
 	border-top: 0px;
 	float:right;
 	width:calc(100% - 272px);
-	overflow: scroll;
+	overflow-y: scroll;
+	overflow-x: hidden;;
 }
 
 .menu {

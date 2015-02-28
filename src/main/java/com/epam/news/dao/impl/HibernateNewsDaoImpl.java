@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class HibernateNewsDaoImpl implements INewsDao {
+public final class HibernateNewsDaoImpl implements INewsDao {
 
 	private final static Logger LOG = Logger.getLogger(HibernateNewsDaoImpl.class);
 
